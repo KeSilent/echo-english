@@ -85,7 +85,8 @@ const Calendar: React.FC = () => {
 
     return days;
   };
-
+  const year = new Date().getFullYear();
+  const month = new Date().getMonth() + 1;
   return (
     <Card className="p-5">
       <CardHeader>
@@ -95,7 +96,7 @@ const Calendar: React.FC = () => {
 
       <CardContent>
         <div className="grid grid-cols-7 gap-2">
-          {generateCalendar(2024, 10)}
+          {generateCalendar(year, month)}
         </div>
       </CardContent>
     </Card>
