@@ -4,9 +4,9 @@ import './globals.css';
 import Link from 'next/link';
 import { Squirrel } from 'lucide-react';
 import Image from 'next/image';
-import Navbar from './home/navbar';
-import SheetNavBar from './home/sheetnavbar';
-import Head from './home/head';
+import Navbar from './layout/navbar';
+import SheetNavBar from './layout/sheetnavbar';
+import Head from './layout/head';
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
