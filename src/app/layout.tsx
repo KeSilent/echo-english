@@ -20,7 +20,7 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: 'Create Next App',
+  title: 'Echo English',
   description: '念念不忘必有回响，学英语也一样！',
 };
 
@@ -42,7 +42,12 @@ export default function RootLayout({
                   href="/"
                   className="flex items-center gap-2 font-semibold"
                 >
-                  <Squirrel className="h-6 w-6 text-primary" />
+                  <Image
+                    src={'/assets/logo.png'}
+                    width={36}
+                    height={36}
+                    alt="Echo English"
+                  ></Image>
                   <span className="text-lg text-primary">Echo English</span>
                 </Link>
               </div>
