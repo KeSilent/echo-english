@@ -2,27 +2,11 @@ import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import './globals.css';
 import Link from 'next/link';
-import {
-  CircleUser,
-  Home,
-  Menu,
-  MonitorPlay,
-  Snail,
-  Squirrel,
-  Users,
-} from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { Squirrel } from 'lucide-react';
 import Image from 'next/image';
-import Navbar from './navbar';
+import Navbar from './home/navbar';
+import SheetNavBar from './home/sheetnavbar';
+import Head from './home/head';
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -46,7 +30,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
@@ -63,63 +47,14 @@ export default function RootLayout({
                 </Link>
               </div>
               <div className="flex-1">
-                <Navbar/>
+                <Navbar></Navbar>
               </div>
             </div>
           </div>
           <div className="flex flex-col">
             <header className="flex h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6">
-              <Sheet>
-                <SheetTrigger asChild>
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    className="shrink-0 md:hidden"
-                  >
-                    <Menu className="h-5 w-5" />
-                    <span className="sr-only">菜单</span>
-                  </Button>
-                </SheetTrigger>
-                <SheetContent side="left" className="flex flex-col">
-                  <nav className="grid gap-2 text-lg font-medium">
-                    <Link
-                      href="#"
-                      className="flex items-center gap-2 text-lg font-semibold"
-                    >
-                      <Squirrel className="h-6 w-6" />
-                      <span className="text-lg">Echo English</span>
-                    </Link>
-                    <Link
-                      href="#"
-                      className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-                    >
-                      <Home className="h-5 w-5" />
-                      主页
-                    </Link>
-                    <Link
-                      href="#"
-                      className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-                    >
-                      <Snail className="h-5 w-5" />
-                      场景
-                    </Link>
-                    <Link
-                      href="#"
-                      className="flex items-center gap-3 rounded-lg bg-muted px-3 py-2 text-primary transition-all hover:text-primary"
-                    >
-                      <MonitorPlay className="h-5 w-5" />
-                      视频
-                    </Link>
-                    <Link
-                      href="#"
-                      className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-                    >
-                      <Users className="h-5 w-5" />
-                      对话
-                    </Link>
-                  </nav>
-                </SheetContent>
-              </Sheet>
+              <SheetNavBar></SheetNavBar>
+
               <div className="w-full flex-1">
                 <form>
                   <div className="relative">
@@ -133,45 +68,7 @@ export default function RootLayout({
                 </form>
               </div>
               <div className="flex items-center gap-4">
-                <div>
-                  <Image
-                    src="/assets/book.svg"
-                    width={28}
-                    height={28}
-                    alt="钻石"
-                  ></Image>
-                </div>
-                <div className="flex items-center gap-1">
-                  <Image
-                    src="/assets/diamond.svg"
-                    width={28}
-                    height={28}
-                    alt="钻石"
-                  ></Image>
-                  <span className="text-base font-bold">0</span>
-                </div>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button
-                      variant="secondary"
-                      size="icon"
-                      className="rounded-full"
-                    >
-                      <CircleUser className="h-5 w-5" />
-                      <span className="sr-only">我的账号</span>
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuLabel>我的账号</DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem>个人信息设置</DropdownMenuItem>
-                    <DropdownMenuItem>学习设置</DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem>帮助</DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem>退出</DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
+                <Head></Head>
               </div>
             </header>
             <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
