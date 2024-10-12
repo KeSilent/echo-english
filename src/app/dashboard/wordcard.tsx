@@ -5,7 +5,7 @@ export default function WordCard() {
   const reviewedWord = 130;
 
   return (
-    <Card className="w-[350px] hover:bg-primary/10 ">
+    <Card className="hover:bg-primary/10 ">
       <CardHeader>
         <CardTitle className="flex justify-between">
           <div>单词学习</div>

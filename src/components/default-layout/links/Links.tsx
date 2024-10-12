@@ -1,18 +1,21 @@
 'use client';
-import Link from 'next/link';
+
+import { cn } from '@/lib/utils';
 import { Home, MonitorPlay, Snail, Users } from 'lucide-react';
+import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-type Links = {
+type Link = {
   id: number;
   title: string;
   url: string;
   icon?: React.ReactNode;
 };
-export default function Navbar() {
+
+const Links = () => {
   const pathname = usePathname();
 
-  const links: Links[] = [
+  const links: Link[] = [
     {
       id: 1,
       title: '主页',
@@ -40,29 +43,26 @@ export default function Navbar() {
   ];
 
   return (
-    <nav className="grid items-start px-2 text-lg font-medium lg:px-4">
-      {links.map(({ id, title, url, icon }: Links) => {
-        const isActive = pathname.startsWith(url);
-        return isActive ? (
+    <>
+      {links.map(({ id, title, url, icon }: Link) => {
+        const isActive = pathname === url;
+        return (
           <Link
             key={id}
             href={url}
-            className="flex items-center gap-3 rounded-lg px-3 py-2 bg-muted text-primary transition-all hover:text-primary"
-          >
-            {icon}
-            {title}
-          </Link>
-        ) : (
-          <Link
-            key={id}
-            href={url}
-            className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+            className={cn(
+              'flex items-center gap-3 rounded-lg px-3 py-2 transition-all hover:text-primary',
+              { 'bg-muted text-primary ': isActive },
+              { 'text-muted-foreground ': !isActive },
+            )}
           >
             {icon}
             {title}
           </Link>
         );
       })}
-    </nav>
+    </>
   );
-}
+};
+
+export default Links;

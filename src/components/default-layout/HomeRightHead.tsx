@@ -11,7 +11,7 @@ import { CircleUser } from 'lucide-react';
 
 import Image from 'next/image';
 
-export default function Head() {
+export default function HomeRightHead() {
   return (
     <>
       <div>
