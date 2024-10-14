@@ -1,21 +1,16 @@
 'use client';
 
 import { cn } from '@/lib/utils';
+import { NavbarLink } from '@/model/navbar-link';
 import { Home, MonitorPlay, Snail, Users } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-type Link = {
-  id: number;
-  title: string;
-  url: string;
-  icon?: React.ReactNode;
-};
 
 const Links = () => {
   const pathname = usePathname();
 
-  const links: Link[] = [
+  const links: NavbarLink[] = [
     {
       id: 1,
       title: '主页',
@@ -44,7 +39,7 @@ const Links = () => {
 
   return (
     <>
-      {links.map(({ id, title, url, icon }: Link) => {
+      {links.map(({ id, title, url, icon }: NavbarLink) => {
         const isActive = pathname === url;
         return (
           <Link

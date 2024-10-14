@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import '../globals.css';
 import { cn } from '@/lib/utils';
 import LearnNavbar from '@/components/learn-layout/LearnNavbar';
+import { NavbarLink } from '@/model/navbar-link';
 
 export const metadata: Metadata = {
   title: 'Echo English',
@@ -10,15 +11,17 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
+  item,
 }: Readonly<{
   children: React.ReactNode;
+  item: NavbarLink;
 }>) {
   return (
     <html>
       <body className={cn('antialiased')}>
         <div className="w-full">
-          <header className='flex h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6'>
-            <LearnNavbar></LearnNavbar>
+          <header className="flex h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6">
+            <LearnNavbar item={item}></LearnNavbar>
           </header>
           <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
             {children}

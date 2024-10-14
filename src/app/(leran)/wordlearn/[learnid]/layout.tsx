@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
-import LearnLayout from '../learn-layout';
+import Layout from '../../layout';
+import { NavbarLink } from '@/model/navbar-link';
 
 export const metadata: Metadata = {
   title: 'Echo English',
@@ -8,8 +9,10 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
+  item,
 }: Readonly<{
   children: React.ReactNode;
+  item: NavbarLink;
 }>) {
-  return <LearnLayout>{children}</LearnLayout>;
+  return <Layout item={item}>{children}</Layout>;
 }

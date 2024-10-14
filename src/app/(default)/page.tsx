@@ -14,7 +14,10 @@ export default function HomePage() {
         <main className="flex flex-col row-start-2">
           <Leve></Leve>
           <div className="pt-10 flex flex-col sm:flex-row gap-2">
-            <div className="sm:w-1/3" onClick={() => router.push('/learn')}>
+            <div
+              className="sm:w-1/3"
+              onClick={() => router.push('/wordlearn/1')}
+            >
               <WordCard></WordCard>
             </div>
             <div className="sm:w-1/3">

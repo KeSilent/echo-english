@@ -6,13 +6,6 @@ import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import Links from './links/Links';
 import { Menu } from 'lucide-react';
 
-type Links = {
-  id: number;
-  title: string;
-  url: string;
-  icon?: React.ReactNode;
-};
-
 export default function SmallNavBar() {
   return (
     <header className="flex h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6">
