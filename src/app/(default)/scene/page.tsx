@@ -1,14 +1,32 @@
+"use client";
 import MaxWindthWrapper from "@/components/MaxWidathWrapper";
-import { SceneThemeItem } from "@/model/theme-item";
+import { SceneThemeGrouproup, SceneThemeItem } from "@/model/theme-item";
 import Image from "next/image";
 import { Progress } from "@/components/ui/progress";
 import { getSceneThemeList } from "@/api/scene-theme-api";
-export default async function ScenePage() {
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+export default function ScenePage() {
+  const router = useRouter();
   //其他各主题列表
-  const SceneThemeGroupList = await getSceneThemeList();
+  const [sceneThemeGroupList, setSceneThemeGroupList] = useState<
+    SceneThemeGrouproup[]
+  >([]);
+  const [studySceneThemeList, setStudySceneThemeList] = useState<
+    SceneThemeItem[]
+  >([]);
 
-  //当前学习的场景主题列表
-  const studySceneThemeList = SceneThemeGroupList[0].items;
+  useEffect(() => {
+    (async () => {
+      const list = await getSceneThemeList();
+      setSceneThemeGroupList(list);
+      //当前学习的场景主题列表
+      setStudySceneThemeList(list[0].items);
+    })();
+  }, []);
+  function toLearnHandler(sceneId: string) {
+    router.push("/wordlearn/" + sceneId);
+  }
 
   return (
     <MaxWindthWrapper>
@@ -16,12 +34,14 @@ export default async function ScenePage() {
         <div className="">
           {titleDiv("当前学习")}
           <div className="flex overflow-x-auto whitespace-nowrap">
-            {studySceneThemeList.map((item) => sceneThemeItemFunction(item, true))}
+            {studySceneThemeList.map((item) =>
+              sceneThemeItemFunction(item, true)
+            )}
           </div>
         </div>
         <div className="pt-10">
           {titleDiv("其他主题")}
-          {SceneThemeGroupList.map((group) => (
+          {sceneThemeGroupList.map((group) => (
             <div className="pt-5" key={group.id}>
               <div className="text-xl font-bold">{group.title}</div>
               <div className="flex max-w-screen overflow-x-auto whitespace-nowrap">
@@ -40,13 +60,16 @@ export default async function ScenePage() {
       <div
         className="flex shadow-md flex-none justify-between w-96 m-5 bg-themeItemBac rounded-lg items-center hover:bg-hoverThemeItemBac hover:text-white cursor-pointer"
         key={item.id}
+        onClick={() => toLearnHandler(item.id)}
       >
         <div className="p-5 flex flex-col gap-3 w-full">
           <div className="text-lg font-bold">{item.title}</div>
           <div>{item.description}</div>
           {isStudy ? (
             <Progress className="w-full " value={item.progress * 100} />
-          ): (<div></div>)}
+          ) : (
+            <div></div>
+          )}
         </div>
         <Image
           className="rounded-l-full"
