@@ -11,6 +11,7 @@ const config: Config = {
   	extend: {
   		colors: {
 			themeItemBac:'#F1DEC6',
+			hoverThemeItemBac:'#179BAE',
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
   			card: {
