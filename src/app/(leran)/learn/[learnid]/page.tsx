@@ -8,5 +8,5 @@ export default function WordLearnPage() {
     window.history.replaceState({page:1},'',"/new-page");
   };
   
-  return <div onClick={handleClick}>{params.learnid}</div>;
+  return <div onClick={handleClick}></div>;
 }

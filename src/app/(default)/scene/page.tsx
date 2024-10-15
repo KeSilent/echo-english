@@ -1,19 +1,23 @@
 "use client";
 import MaxWindthWrapper from "@/components/MaxWidathWrapper";
-import { SceneThemeGrouproup, SceneThemeItem } from "@/model/theme-item";
+import {
+  SceneThemeGrouproupModel,
+  SceneThemeItemModel,
+} from "@/model/theme-item-model";
 import Image from "next/image";
 import { Progress } from "@/components/ui/progress";
 import { getSceneThemeList } from "@/api/scene-theme-api";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { LearnParameterModel } from "@/model/learn-parameter-model";
 export default function ScenePage() {
   const router = useRouter();
   //其他各主题列表
   const [sceneThemeGroupList, setSceneThemeGroupList] = useState<
-    SceneThemeGrouproup[]
+    SceneThemeGrouproupModel[]
   >([]);
   const [studySceneThemeList, setStudySceneThemeList] = useState<
-    SceneThemeItem[]
+    SceneThemeItemModel[]
   >([]);
 
   useEffect(() => {
@@ -24,8 +28,16 @@ export default function ScenePage() {
       setStudySceneThemeList(list[0].items);
     })();
   }, []);
-  function toLearnHandler(sceneId: string) {
-    router.push("/wordlearn/" + sceneId);
+  function toLearnHandler(scene: SceneThemeItemModel) {
+    sessionStorage.removeItem("learnHandlerData");
+    const param: LearnParameterModel = {
+      navbarIndex: 1,
+      sceneTitle: scene.title,
+      sceneDescription: scene.description,
+    };
+
+    sessionStorage.setItem("learnHandlerData", JSON.stringify(param));
+    router.push(`/learn/${scene.id}`);
   }
 
   return (
@@ -55,12 +67,15 @@ export default function ScenePage() {
   );
 
   //显示主题
-  function sceneThemeItemFunction(item: SceneThemeItem, isStudy?: boolean) {
+  function sceneThemeItemFunction(
+    item: SceneThemeItemModel,
+    isStudy?: boolean
+  ) {
     return (
       <div
         className="flex shadow-md flex-none justify-between w-96 m-5 bg-themeItemBac rounded-lg items-center hover:bg-hoverThemeItemBac hover:text-white cursor-pointer"
         key={item.id}
-        onClick={() => toLearnHandler(item.id)}
+        onClick={() => toLearnHandler(item)}
       >
         <div className="p-5 flex flex-col gap-3 w-full">
           <div className="text-lg font-bold">{item.title}</div>

@@ -1,5 +1,5 @@
 // 场景主题列表项
-export interface SceneThemeItem {
+export interface SceneThemeItemModel {
   id: string;
   title: string;
   description: string;
@@ -9,8 +9,8 @@ export interface SceneThemeItem {
 }
 
 // 场景主题分组
-export interface SceneThemeGrouproup {
+export interface SceneThemeGrouproupModel {
   id: string;
   title: string;
-  items: SceneThemeItem[];
+  items: SceneThemeItemModel[];
 }

@@ -1,8 +1,8 @@
-import { SceneThemeGrouproup, SceneThemeItem } from "@/model/theme-item";
+import { SceneThemeGrouproupModel, SceneThemeItemModel } from "@/model/theme-item-model";
 
 // 获取主题列表
 export async function getSceneThemeList() {
-  const studySceneThemeList: SceneThemeItem[] = [
+  const studySceneThemeList: SceneThemeItemModel[] = [
     {
       id: "1",
       title: "旅行",
@@ -37,7 +37,7 @@ export async function getSceneThemeList() {
     },
   ];
 
-  const SceneThemeGroupList: SceneThemeGrouproup[] = [
+  const SceneThemeGroupList: SceneThemeGrouproupModel[] = [
     {
       id: "1",
       title: "旅行",
