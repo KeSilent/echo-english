@@ -1,12 +1,18 @@
-"use client"
+"use client";
+import MaxWindthWrapper from "@/components/MaxWidathWrapper";
+import { Progress } from "@/components/ui/progress";
 import { useParams } from "next/navigation";
+import Learn from "@/components/learn/Learn";
 
 export default function WordLearnPage() {
   const params = useParams();
 
-  const handleClick = () => {
-    window.history.replaceState({page:1},'',"/new-page");
-  };
-  
-  return <div onClick={handleClick}></div>;
+  return (
+    <MaxWindthWrapper>
+      <Progress className="w-full h-3 md:h-5 rounded-md" value={33} />
+      <div>
+        <Learn></Learn>
+      </div>
+    </MaxWindthWrapper>
+  );
 }

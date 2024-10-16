@@ -15,15 +15,13 @@ export default function RootLayout({
 }>) {
   return (
     <html>
-      <body className={cn("antialiased")}>
-        <div className="w-full">
-          <header className="flex h-16 items-center border-b px-4 lg:h-24 lg:px-6 bg-hoverThemeItemBac">
-            <LearnNavbar></LearnNavbar>
-          </header>
-          <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
-            {children}
-          </main>
-        </div>
+      <body className={cn("antialiased,w-full")}>
+        <header className="flex h-16 items-center border-b px-4 lg:h-24 lg:px-6 bg-hoverThemeItemBac">
+          <LearnNavbar></LearnNavbar>
+        </header>
+        <main className="flex flex-1 flex-col gap-4 p-4 h-full lg:gap-6 lg:p-6 bg-white">
+          {children}
+        </main>
       </body>
     </html>
   );

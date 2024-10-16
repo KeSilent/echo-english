@@ -3,9 +3,11 @@ import NavbarDataApi from "@/api/navbar-data-api";
 import { LearnParameterModel } from "@/model/learn-parameter-model";
 import { NavbarLinkModel } from "@/model/navbar-link-model";
 import { X } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function LearnNavbar() {
+  const router = useRouter();
   const [learnHandlerData, setLearnHandlerData] = useState<LearnParameterModel>(
     {}
   );
@@ -41,7 +43,7 @@ export default function LearnNavbar() {
         </div>
       </div>
       <div>
-        <X className="size-10"/>
+        <X className="size-10 cursor-pointer" onClick={()=>{router.back()}}/>
       </div>
     </div>
   );
