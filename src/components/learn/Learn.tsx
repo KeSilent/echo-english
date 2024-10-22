@@ -1,10 +1,11 @@
 import { ChevronRight, CircleCheckBig, Sparkle } from "lucide-react";
-import LearnWordPage from "./word-question/LearnWord";
+import { LearnModel } from "@/model/learn-word/learn-model";
+import WordDisplayPage from "./word-question/WordDisplay";
 
-export default function LearnPage() {
+export default function LearnPage({ learnModel }: { learnModel: LearnModel }) {
   return (
     <div className="flex flex-col md:flex-row justify-between pt-40">
-      <LearnWordPage></LearnWordPage>
+      {showWordPage(learnModel)}
       {/* 大屏显示 */}
       <div className="hidden md:block">
         <div className="flex flex-col gap-8 items-center pt-5">
@@ -39,5 +40,16 @@ export default function LearnPage() {
         </div>
       </>
     );
+  }
+
+  function showWordPage(learnModel: LearnModel) {
+    switch (learnModel.model) {
+      case "wordDisplay":
+        return (
+          <WordDisplayPage
+            learnWordModel={learnModel.words[learnModel.currentStep]}
+          ></WordDisplayPage>
+        );
+    }
   }
 }
