@@ -12,12 +12,30 @@ const Links = () => {
 
   const [links, setLinks] = useState<NavbarLinkModel[]>([]);
 
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
   useEffect(() => {
     (async () => {
-      const list = await NavbarDataApi();
-      setLinks(list);
+      try {
+        const list = await NavbarDataApi();
+        setLinks(list);
+      } catch (err) {
+        setError("Failed to load data");
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
     })();
   });
+
+  if (loading) {
+    return <div>加载中...</div>;
+  }
+
+  if (error) {
+    return <div>{error}</div>;
+  }
 
   return (
     <>
