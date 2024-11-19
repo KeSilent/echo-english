@@ -27,7 +27,7 @@ const Links = () => {
         setLoading(false);
       }
     })();
-  });
+  },[]);
 
   if (loading) {
     return <div>加载中...</div>;
