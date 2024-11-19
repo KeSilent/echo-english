@@ -3,7 +3,7 @@ import { LearnWordModel } from "./learn-word-model";
 export interface LearnModel {
   words: LearnWordModel[];
   currentWordIndex: number; // 表示当前正在学习第几个单词
-  errorQuestions: [];
+  errorQuestions: number[];
 }
 export const learnWord: LearnModel = {
   words: [
@@ -80,6 +80,6 @@ export const learnWord: LearnModel = {
       currentStepModel: "wordDisplay"
     },
   ],
-  currentWordIndex: 0,
+  currentWordIndex: -1,
   errorQuestions: [],
 };

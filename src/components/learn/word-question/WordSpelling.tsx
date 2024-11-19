@@ -4,10 +4,12 @@ import { MoveLeft } from "lucide-react";
 import { useEffect, useState } from "react";
 
 // 单词拼写
-export default function WordSpeling({
+export default function WordSpelingPage({
   learnWordModel,
+  handleIsRight,
 }: {
   learnWordModel: LearnWordModel;
+  handleIsRight: (isRight: boolean) => void;
 }) {
   const [shuffledLetters, setShuffledLetters] = useState<string[]>([]);
   const [answer, setAnswer] = useState("");
@@ -15,7 +17,7 @@ export default function WordSpeling({
 
   useEffect(() => {
     const letterList = Array.from(new Set(learnWordModel.word));
-
+    setAnswer("");
     setShuffledLetters(shuffleArray(letterList));
   }, [learnWordModel.word]);
 
@@ -24,10 +26,12 @@ export default function WordSpeling({
   useEffect(() => {
     if (answer === learnWordModel.word) {
       setIsCorrect(true);
+      handleIsRight(true);
     } else {
       setIsCorrect(false);
+      handleIsRight(false);
     }
-  }, [answer, learnWordModel.word]);
+  }, [answer, handleIsRight, learnWordModel.word]);
 
   const handleLetterClick = async (letter: string) => {
     await setAnswer(answer + letter);
@@ -65,7 +69,7 @@ export default function WordSpeling({
           value={answer}
         />
       </div>
-      <div className="flex flex-wrap flex-col sm:flex-row gap-2 pt-10">
+      <div className="flex flex-wrap flex-row gap-2 pt-10">
         {letters}
         <div
           onClick={handleDeleteLetter}
