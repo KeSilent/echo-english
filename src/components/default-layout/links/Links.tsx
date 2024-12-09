@@ -16,18 +16,32 @@ const Links = () => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    (async () => {
+    let mounted = true;
+
+    const fetchData = async () => {
       try {
+        setLoading(true);
         const list = await NavbarDataApi();
-        setLinks(list);
+        if (mounted) {
+          setLinks(list);
+        }
       } catch (err) {
-        setError("Failed to load data");
-        console.error(err);
+        if (mounted) {
+          setError("Failed to load data");
+          console.error(err);
+        }
       } finally {
-        setLoading(false);
+        if (mounted) {
+          setLoading(false);
+        }
       }
-    })();
-  },[]);
+    };
+
+    fetchData();
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   if (loading) {
     return <div>加载中...</div>;
