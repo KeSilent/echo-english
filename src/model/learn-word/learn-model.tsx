@@ -1,9 +1,15 @@
 import { LearnWordModel } from "./learn-word-model";
 
+export type LearningPhase =
+  | "display"
+  | "practice"
+  | "error-correction"
+  | "complete";
+
 export interface LearnModel {
   words: LearnWordModel[];
   currentWordIndex: number; // 表示当前正在学习第几个单词
-  errorQuestions: number[];
+  currentPhase: LearningPhase;
 }
 export const learnWord: LearnModel = {
   words: [
@@ -12,8 +18,10 @@ export const learnWord: LearnModel = {
       word: "hello",
       pronunciation: "/həˈləʊ/",
       translation: "你好",
-      audio1: "https://www.oxfordlearnersdictionaries.com/media/english/uk_pron/h/hel/hello/hello__gb_1.mp3",
-      audio2: "https://www.oxfordlearnersdictionaries.com/media/english/us_pron/h/hel/hello/hello__us_1_rr.mp3",
+      audio1:
+        "https://www.oxfordlearnersdictionaries.com/media/english/uk_pron/h/hel/hello/hello__gb_1.mp3",
+      audio2:
+        "https://www.oxfordlearnersdictionaries.com/media/english/us_pron/h/hel/hello/hello__us_1_rr.mp3",
       sentence: [
         {
           text: "I ate an apple.",
@@ -23,15 +31,19 @@ export const learnWord: LearnModel = {
           id: 0,
         },
       ],
-      currentStepModel: "wordDisplay"
+      currentStepModel: "wordDisplay",
+      completedSteps: [],
+      errorSteps: [],
     },
     {
       id: 2,
       word: "apple",
       pronunciation: "/ˈæp(ə)l/",
       translation: "苹果",
-      audio1: "https://www.oxfordlearnersdictionaries.com/media/english/uk_pron/a/app/apple/apple__gb_2.mp3",
-      audio2: "https://www.oxfordlearnersdictionaries.com/media/english/us_pron/a/app/apple/apple__us_1.mp3",
+      audio1:
+        "https://www.oxfordlearnersdictionaries.com/media/english/uk_pron/a/app/apple/apple__gb_2.mp3",
+      audio2:
+        "https://www.oxfordlearnersdictionaries.com/media/english/us_pron/a/app/apple/apple__us_1.mp3",
       sentence: [
         {
           text: "I ate an apple.",
@@ -41,14 +53,18 @@ export const learnWord: LearnModel = {
           id: 0,
         },
       ],
-      currentStepModel: "wordDisplay"
+      currentStepModel: "wordDisplay",
+      completedSteps: [],
+      errorSteps: [],
     },
     {
       word: "banana",
       pronunciation: "/bəˈnænə/",
       translation: "香蕉",
-      audio1: "https://www.oxfordlearnersdictionaries.com/media/english/uk_pron/b/ban/banan/banana__gb_2.mp3",
-      audio2: "https://www.oxfordlearnersdictionaries.com/media/english/us_pron/b/ban/banan/banana__us_2.mp3",
+      audio1:
+        "https://www.oxfordlearnersdictionaries.com/media/english/uk_pron/b/ban/banan/banana__gb_2.mp3",
+      audio2:
+        "https://www.oxfordlearnersdictionaries.com/media/english/us_pron/b/ban/banan/banana__us_2.mp3",
       sentence: [
         {
           text: "Bananas are yellow.",
@@ -59,14 +75,18 @@ export const learnWord: LearnModel = {
         },
       ],
       id: 0,
-      currentStepModel: "wordDisplay"
+      currentStepModel: "wordDisplay",
+      completedSteps: [],
+      errorSteps: [],
     },
     {
       word: "cherry",
       pronunciation: "/ˈʧɛri/",
       translation: "樱桃",
-      audio1: "https://www.oxfordlearnersdictionaries.com/media/english/uk_pron/c/che/cherr/cherry__gb_2.mp3",
-      audio2: "https://www.oxfordlearnersdictionaries.com/media/english/us_pron/c/che/cherr/cherry__us_1.mp3",
+      audio1:
+        "https://www.oxfordlearnersdictionaries.com/media/english/uk_pron/c/che/cherr/cherry__gb_2.mp3",
+      audio2:
+        "https://www.oxfordlearnersdictionaries.com/media/english/us_pron/c/che/cherr/cherry__us_1.mp3",
       sentence: [
         {
           text: "Cherries are sweet.",
@@ -77,9 +97,11 @@ export const learnWord: LearnModel = {
         },
       ],
       id: 0,
-      currentStepModel: "wordDisplay"
+      currentStepModel: "wordDisplay",
+      completedSteps: [],
+      errorSteps: [],
     },
   ],
-  currentWordIndex: -1,
-  errorQuestions: [],
+  currentWordIndex: 0,
+  currentPhase: "display",
 };

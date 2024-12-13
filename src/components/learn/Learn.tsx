@@ -8,6 +8,10 @@ import { LearnModel } from "@/model/learn-word/learn-model";
 import WordDisplayPage from "./word-question/WordDisplay";
 import { useCallback, useEffect, useState } from "react";
 import WordSpelingPage from "./word-question/WordSpelling";
+import {
+  LearningStep,
+  LearnWordModel,
+} from "@/model/learn-word/learn-word-model";
 
 export default function LearnPage({
   initialLearnWordModel,
@@ -20,7 +24,8 @@ export default function LearnPage({
   const [xLButton, setXLButton] = useState<JSX.Element | null>(null);
   const [msButton, setMsButton] = useState<JSX.Element | null>(null);
   const [page, setPage] = useState<JSX.Element | null>(null);
-  const [isRight, setIsRight] = useState(false);
+  const [shouldMoveNext, setShouldMoveNext] = useState(false);
+
   //当前进度
   const [progress, setProgress] = useState("wordDisplay");
 
@@ -35,68 +40,104 @@ export default function LearnPage({
     </>
   );
 
-  // 更新当前单词的状态
-  const updateCurrentWord = useCallback((isRight: boolean) => {
-    setLearnModel((prevModel) => {
-      const { currentWordIndex, words, errorQuestions } = prevModel;
-      const currentWord = words[currentWordIndex];
-
-      let errorQuestionList = [...errorQuestions];
-      // 如果用户答错，记录错误单词
-      if (!isRight) {
-        errorQuestionList = [...errorQuestions, currentWordIndex];
+  // 获取当前单词应该显示的步骤
+  const getCurrentStep = useCallback(
+    (word: LearnWordModel) => {
+      if (!word || !word.completedSteps || !word.errorSteps) {
+        return "wordDisplay"; // 默认返回
       }
 
-      // 更新当前单词的学习步骤
+      const { currentPhase } = learnModel;
+
+      // 错误修正阶段
+      if (currentPhase === "error-correction" && word.errorSteps.length > 0) {
+        return word.errorSteps[0];
+      }
+
+      // 展示阶段
+      if (currentPhase === "display") {
+        return "wordDisplay";
+      }
+
+      // 练习阶段
+      const stepOrder: LearningStep[] = ["spelling", "sentenceDisplay", "quiz"];
+      return (
+        stepOrder.find((step) => !word.completedSteps.includes(step)) ||
+        "wordDisplay"
+      );
+    },
+    [learnModel]
+  );
+
+  const updateCurrentWord = useCallback(
+    (isCorrect: boolean) => {
+      setLearnModel((prevModel) => {
+        const { currentWordIndex, words } = prevModel;
+        const currentWord = words[currentWordIndex];
+
+        if (
+          !currentWord ||
+          !currentWord.completedSteps ||
+          !currentWord.errorSteps
+        ) {
+          return prevModel;
+        }
+
+        const currentStep = getCurrentStep(currentWord);
+
+        const updatedWord = {
+          ...currentWord,
+          completedSteps: isCorrect
+            ? [...currentWord.completedSteps, currentStep]
+            : currentWord.completedSteps,
+          errorSteps: !isCorrect
+            ? [...currentWord.errorSteps, currentStep]
+            : currentWord.errorSteps,
+        };
+        return {
+          ...prevModel,
+          words: words.map((word, index) =>
+            index === currentWordIndex ? updatedWord : word
+          ),
+        };
+      });
+      // 移除自动设置 shouldMoveNext
+    },
+    [getCurrentStep]
+  );
+  const moveToNext = useCallback(() => {
+    setLearnModel((prevModel) => {
+      const { currentWordIndex, words, currentPhase } = prevModel;
+      let nextIndex = currentWordIndex + 1;
+      let nextPhase = currentPhase;
+
+      if (nextIndex >= words.length) {
+        nextIndex = 0;
+        if (currentPhase === "display") {
+          nextPhase = "practice";
+        } else if (currentPhase === "practice") {
+          const hasErrors = words.some((w) => w.errorSteps.length > 0);
+          nextPhase = hasErrors ? "error-correction" : "complete";
+        }
+      }
+
       return {
         ...prevModel,
-        errorQuestions: errorQuestionList,
-        words: words.map((word, index) =>
-          index === currentWordIndex
-            ? {
-                ...word,
-                currentStepModel: getNextStep(currentWord.currentStepModel),
-                isError: !isRight,
-              }
-            : word
-        ),
+        currentWordIndex: nextIndex,
+        currentPhase: nextPhase,
       };
     });
   }, []);
 
-  //监听状态，切换下一个单词
-  useEffect(() => {
-    setLearnModel((prevModel) => {
-      let nextWordIndex = prevModel.currentWordIndex + 1;
-      if (nextWordIndex == prevModel.words.length) {
-        nextWordIndex = 0;
-        setProgress(getNextStep(progress));
-      }
-      return {
-        ...prevModel,
-        currentWordIndex:
-          nextWordIndex < prevModel.words.length ? nextWordIndex : 0,
-      };
-    });
-  }, [learnModel.words, progress, updateCurrentWord]);
-
-  const getNextStep = (
-    currentStep: string
-  ): "wordDisplay" | "spelling" | "sentenceDisplay" | "quiz" => {
-    switch (currentStep) {
-      case "spelling":
-        return "sentenceDisplay";
-      case "sentenceDisplay":
-        return "quiz";
-      default:
-        return "spelling"; // 或者其他默认值
-    }
-  };
-
-  // 下一个单词
+  // 修改处理"下一个"按钮点击
   const handleNextStep = useCallback(() => {
-    updateCurrentWord(true);
-  }, [updateCurrentWord]);
+    if (learnModel.currentPhase === "display") {
+      moveToNext();
+    } else {
+      updateCurrentWord(true);
+      moveToNext();
+    }
+  }, [learnModel.currentPhase, updateCurrentWord, moveToNext]);
 
   // 回答错误
   const handleError = useCallback(() => {
@@ -105,11 +146,13 @@ export default function LearnPage({
 
   //切换下一步按钮
   const handleNextIcon = (isRight: boolean) => {
-    setIsRight(isRight);
+    setShouldMoveNext(isRight);
   };
 
-  //监听渲染页面组件
+  // 渲染当前步骤的组件
   useEffect(() => {
+    const currentWord = learnModel.words[learnModel.currentWordIndex];
+    const currentStep = getCurrentStep(currentWord);
     //所有不为空的数量
     let notEmptyNumber = 0;
 
@@ -122,7 +165,7 @@ export default function LearnPage({
     updateParentValue((notEmptyNumber / (learnModel.words.length * 3)) * 100);
     const returnButton = (isWordDisplay: boolean) => {
       setXLButton(
-        isRight || isWordDisplay ? (
+        shouldMoveNext || isWordDisplay ? (
           <div
             onClick={handleNextStep}
             className="flex flex-col gap-2 items-center px-3 py-8 bg-primary hover:bg-primary/85 cursor-pointer shadow rounded-2xl"
@@ -141,7 +184,7 @@ export default function LearnPage({
         )
       );
       setMsButton(
-        isRight || isWordDisplay ? (
+        shouldMoveNext || isWordDisplay ? (
           <div
             onClick={handleNextStep}
             className="flex gap-2 items-center justify-center w-full py-3 mr-8 bg-primary hover:bg-primary/85 cursor-pointer shadow rounded-2xl"
@@ -160,12 +203,7 @@ export default function LearnPage({
         )
       );
     };
-
-    switch (
-      learnModel.words[
-        learnModel.currentWordIndex < 0 ? 0 : learnModel.currentWordIndex
-      ].currentStepModel
-    ) {
+    switch (currentStep) {
       case "wordDisplay":
         returnButton(true);
         setPage(
@@ -189,8 +227,28 @@ export default function LearnPage({
           ></WordSpelingPage>
         );
         break;
+      // ... 其他步骤的组件
     }
-  }, [handleError, handleNextStep, isRight, learnModel, updateParentValue]);
+  }, [
+    learnModel.currentWordIndex,
+    learnModel.currentPhase,
+    getCurrentStep,
+    learnModel.words,
+    updateParentValue,
+    shouldMoveNext,
+    handleNextStep,
+    handleError,
+  ]);
+
+  // 更新进度
+  useEffect(() => {
+    const completedCount = learnModel.words.reduce(
+      (acc, word) => acc + word.completedSteps.length,
+      0
+    );
+    const totalSteps = learnModel.words.length * 3; // 每个单词3个步骤
+    updateParentValue((completedCount / totalSteps) * 100);
+  }, [learnModel.words, updateParentValue]);
 
   return (
     <div className="flex flex-col md:flex-row justify-between pt-40">
