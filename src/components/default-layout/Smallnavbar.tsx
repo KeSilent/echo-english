@@ -1,9 +1,9 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import HomeRightHead from './HomeRightHead';
+import Head from './Head';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import Links from './links/Links';
+import Links from './Links';
 import { Menu } from 'lucide-react';
 
 export default function SmallNavBar() {
@@ -47,7 +47,7 @@ export default function SmallNavBar() {
         </form>
       </div>
       <div className="flex items-center gap-4">
-        <HomeRightHead></HomeRightHead>
+        <Head></Head>
       </div>
     </header>
   );

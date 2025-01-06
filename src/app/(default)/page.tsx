@@ -1,9 +1,9 @@
 'use client';
 import { useRouter } from 'next/navigation';
-import Leve from '../dashboard/leve';
-import WordCard from '../dashboard/wordcard';
+import Leve from '../../components/dashboard/leve';
+import WordCard from '../../components/dashboard/wordcard';
 import MaxWindthWrapper from '@/components/MaxWidathWrapper';
-import Calendar from '../dashboard/calendar';
+import Calendar from '../../components/dashboard/calendar';
 
 export default function HomePage() {
   const router = useRouter();

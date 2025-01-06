@@ -9,15 +9,12 @@ import { useEffect, useState } from "react";
 
 const Links = () => {
   const pathname = usePathname();
-
   const [links, setLinks] = useState<NavbarLinkModel[]>([]);
-
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     let mounted = true;
-
     const fetchData = async () => {
       try {
         setLoading(true);
@@ -38,6 +35,7 @@ const Links = () => {
     };
 
     fetchData();
+    
     return () => {
       mounted = false;
     };
